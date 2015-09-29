@@ -22,6 +22,9 @@ public class PersistenceStateMachine {
 		if (sm2 != null) {
 			// unfortunately, this creates a second StateMachine object, even though it is a singleton
 			// copy loaded model into singleton instance of StateMachine, because this will be used throughout the application
+			sm.setClassName(sm2.getClassName());
+			sm.setPackageName(sm2.getPackageName());
+			sm.setStartState(sm2.getStartState());
 			Iterator<State> sIt = sm2.getStates().iterator();
 			while (sIt.hasNext())
 				sm.addState(sIt.next());
