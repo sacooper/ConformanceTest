@@ -29,12 +29,13 @@ public class Generator {
 		testSuite.append("package " + sm.getPackageName() + ";\n");
 		testSuite.append("import " + sm.getPackageName() + ".*;\n");
 		testSuite.append("import static org.junit.Assert.*;\n");
+		testSuite.append("import org.junit.Before;\n");
 		testSuite.append("import org.junit.Test;\n\n");
 		testSuite.append("public class " + className + "Test " + "{\n");
 		
 		indent(1); testSuite.append("private " + className + " klazz;\n\n");
 		indent(1); testSuite.append("@Before\n");
-		indent(1); testSuite.append("public void setUp() throws exception {\n");
+		indent(1); testSuite.append("public void setUp() throws Exception {\n");
 		indent(2); testSuite.append("klazz = new " + className + "();\n");
 		
 		if(!root.moves.isEmpty()){
@@ -47,7 +48,7 @@ public class Generator {
 	private void finalizeTestCases(){
 		for (int i = 0; i < testCases.size(); i++){
 			indent(1); testSuite.append("@Test\n");
-			indent(1); testSuite.append("public void testCase" + i + " {\n");
+			indent(1); testSuite.append("public void testCase" + i + "() {\n");
 			testSuite.append(testCases.get(i).toString());
 			indent(1); testSuite.append("}\n\n");
 		}
@@ -85,22 +86,28 @@ public class Generator {
 		}
 		final int x = n.moves.size() - 1;
 		n.moves.get(x).trans.ifPresent(t -> {
+			verifyCurrentState(sb, t.getFrom());
 			performNextTransition(sb, t, n.moves.get(x));
 			verifyTransition(sb, t);
 			generateTestCases(sb, n.moves.get(x));
 		});
 	}
 	
+	private void verifyCurrentState(StringBuilder s, State t){
+		indent(s, 2); s.append("assert(klazz.getStateFullName().equals(\"" + t.getName() + "\"));\n");
+	}
+	
 	private void verifyTransition(StringBuilder s, Transition t){
-		indent(s, 2); 
+		verifyCurrentState(s, t.getTo());
+//		indent(s, 2); 
 		String condition = t.getCondition();
 		String event = t.getEvent();
 		String action = t.getAction();
 
 //		if (condition.length() > 0){
-			indent(s, 2); s.append("Condition: " + condition + "\n");
-			indent(s, 2); s.append("Event: " + event + "\n");
-			indent(s, 2); s.append("Action: " + action + "\n");
+//			indent(s, 2); s.append("Condition: " + condition + "\n");
+//			indent(s, 2); s.append("Event: " + event + "\n");
+//			indent(s, 2); s.append("Action: " + action + "\n");
 //		}
 	}
 	
