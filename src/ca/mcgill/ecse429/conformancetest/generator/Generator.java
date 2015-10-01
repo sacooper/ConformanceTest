@@ -52,7 +52,6 @@ public class Generator {
 			testSuite.append(testCases.get(i).toString());
 			indent(1); testSuite.append("}\n\n");
 		}
-		
 		testSuite.append("}");
 	}
 	
@@ -79,7 +78,9 @@ public class Generator {
 			s.append(sb.toString());
 			final int x = i;
 			n.moves.get(i).trans.ifPresent(t -> {
-				performNextTransition(s, t, n.moves.get(x));
+				verifyCurrentState(sb, t.getFrom());
+				setConditions(s, t);
+				performNextTransition(s, t);
 				verifyTransition(s, t);
 				generateTestCases(s, n.moves.get(x));
 			});
@@ -87,7 +88,8 @@ public class Generator {
 		final int x = n.moves.size() - 1;
 		n.moves.get(x).trans.ifPresent(t -> {
 			verifyCurrentState(sb, t.getFrom());
-			performNextTransition(sb, t, n.moves.get(x));
+			setConditions(sb, t);
+			performNextTransition(sb, t);
 			verifyTransition(sb, t);
 			generateTestCases(sb, n.moves.get(x));
 		});
@@ -95,6 +97,17 @@ public class Generator {
 	
 	private void verifyCurrentState(StringBuilder s, State t){
 		indent(s, 2); s.append("assertEquals(klazz.getStateFullName(), \"" + t.getName() + "\");\n");
+	}
+	
+	private void setConditions(StringBuilder s, Transition t){
+		if(t.getCondition().length() > 0){
+			String cond = t.getCondition();
+			if (cond.matches("^get.*\\(\\)$")){
+				indent(s, 2); s.append("klazz.set" + cond.substring(3, cond.length() - 1) + "true);\n");
+			} if (cond.matches("^!get.*\\(\\)$")){
+				indent(s, 2); s.append("klazz.set" + cond.substring(4, cond.length() - 1) + "false);\n");
+			}
+		}
 	}
 	
 	private void verifyTransition(StringBuilder s, Transition t){
@@ -121,10 +134,6 @@ public class Generator {
 				}
 			}
 		}
-		
-		if(t.getCondition().length() > 0){
-			indent(s, 2); s.append("// COND: " + t.getCondition() + "\n");
-		}
 
 //		if (condition.length() > 0){
 //			indent(s, 2); s.append("Condition: " + condition + "\n");
@@ -133,7 +142,7 @@ public class Generator {
 //		}
 	}
 	
-	private void performNextTransition(StringBuilder s, Transition t, Node n){
+	private void performNextTransition(StringBuilder s, Transition t){
 		if(t.getEvent().length() > 0){
 			indent(s, 2); s.append("klazz." + t.getEvent() + "();\n");
 		}
