@@ -94,15 +94,37 @@ public class Generator {
 	}
 	
 	private void verifyCurrentState(StringBuilder s, State t){
-		indent(s, 2); s.append("assert(klazz.getStateFullName().equals(\"" + t.getName() + "\"));\n");
+		indent(s, 2); s.append("assertEquals(klazz.getStateFullName(), \"" + t.getName() + "\");\n");
 	}
 	
 	private void verifyTransition(StringBuilder s, Transition t){
 		verifyCurrentState(s, t.getTo());
-//		indent(s, 2); 
-		String condition = t.getCondition();
-		String event = t.getEvent();
+//		String condition = t.getCondition();
+//		String event = t.getEvent();
 		String action = t.getAction();
+		if(action.length() > 0){
+			String[] actions = action.split(";");
+			for (String a : actions){
+				if (a.length() > 0){
+					String[] act = a.split(" ?= ?");
+					if(act.length != 2){
+						String x = "";
+						for (String y : act){
+							x = x + ", " + y;
+						}
+						throw new RuntimeException("ERROR: " + x);
+					} else {
+						String method = act[0].substring(0, 1).toUpperCase() + act[0].substring(1);
+						String arg = act[1];
+						indent(s, 2); s.append("klazz.set" + method + "(" + arg + ");\n"); 
+					}
+				}
+			}
+		}
+		
+		if(t.getCondition().length() > 0){
+			indent(s, 2); s.append("// COND: " + t.getCondition() + "\n");
+		}
 
 //		if (condition.length() > 0){
 //			indent(s, 2); s.append("Condition: " + condition + "\n");
@@ -112,7 +134,7 @@ public class Generator {
 	}
 	
 	private void performNextTransition(StringBuilder s, Transition t, Node n){
-		if(t.getAction().length() > 0){
+		if(t.getEvent().length() > 0){
 			indent(s, 2); s.append("klazz." + t.getEvent() + "();\n");
 		}
 	}
