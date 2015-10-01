@@ -119,7 +119,7 @@ public class Generator {
 			String[] actions = action.split(";");
 			for (String a : actions){
 				if (a.length() > 0){
-					String[] act = a.split(" ?= ?");
+					String[] act = a.trim().split(" ?= ?");
 					if(act.length != 2){
 						String x = "";
 						for (String y : act){
@@ -129,6 +129,10 @@ public class Generator {
 					} else {
 						String method = act[0].substring(0, 1).toUpperCase() + act[0].substring(1);
 						String arg = act[1];
+						if (act[1].trim().matches(act[0].trim() + " ?[+-] ?[0-9]+")){
+							arg = arg.replace(act[0].trim(), "klazz.get" + method + "()");
+						} 
+						
 						indent(s, 2); s.append("klazz.set" + method + "(" + arg + ");\n"); 
 					}
 				}
