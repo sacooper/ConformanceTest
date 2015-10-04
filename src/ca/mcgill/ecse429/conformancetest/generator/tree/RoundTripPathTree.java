@@ -17,9 +17,6 @@ public class RoundTripPathTree {
 		this.sm = sm;
 		seen = new HashSet<State>();
 		buildTree(root);
-//		System.out.println(this.sm.getClassName());
-//		System.out.println(this.sm.getPackageName());
-		System.out.println(root.toString());
 	}
 	
 	private void buildTree(Node start){

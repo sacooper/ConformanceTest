@@ -1,54 +1,47 @@
 package ca.mcgill.ecse429.conformancetest.generator;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.tools.JavaCompiler;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardLocation;
-import javax.tools.ToolProvider;
 
 import ca.mcgill.ecse429.conformancetest.generator.tree.Node;
 import ca.mcgill.ecse429.conformancetest.generator.tree.RoundTripPathTree;
-import ca.mcgill.ecse429.conformancetest.statemodel.*;
-import ca.mcgill.ecse429.conformancetest.statemodel.persistence.*;
+import ca.mcgill.ecse429.conformancetest.statemodel.State;
+import ca.mcgill.ecse429.conformancetest.statemodel.StateMachine;
+import ca.mcgill.ecse429.conformancetest.statemodel.Transition;
+import ca.mcgill.ecse429.conformancetest.statemodel.persistence.PersistenceStateMachine;
 
 public class Generator {
 	private StringBuilder testSuite;
 	private StateMachine sm;
-	
 	private ArrayList<StringBuilder> testCases;
+	private String sourceFile;
 	
-	public Generator(String xmlFile){
+	public Generator(String xmlFile, String sourceFile){
 		PersistenceStateMachine.loadStateMachine(xmlFile);
-		testSuite = new StringBuilder();
-		testCases = new ArrayList<StringBuilder>();
+		this.testSuite = new StringBuilder();
+		this.testCases = new ArrayList<StringBuilder>();
+		this.sourceFile= sourceFile;
 	}
 	
 	public void generate(){
 		this.sm = StateMachine.getInstance();
 		RoundTripPathTree tree = new RoundTripPathTree(this.sm);
 		buildTestCases(tree.getRoot());
-		System.out.println(testSuite.toString());
+//		System.out.println(testSuite.toString());
 		exportToFile();
 	}
 	
 	private void exportToFile(){
-
 	    try {
-	    	
-	    	File sourceFile = new File("C:/temp/Test.java");
-		    if(sourceFile.exists()){
-		    	int i = 1;
-		    	while(!sourceFile.createNewFile()){
-		    		sourceFile = new File("C:/temp/Test" + i + ".java");
-		    		i++;
-		    	}
-		    }
+	    	File sourceFile = new File(this.sourceFile);
+//		    if(sourceFile.exists()){
+//		    	int i = 1;
+//		    	while(!sourceFile.createNewFile()){
+//		    		sourceFile = new File("C:/temp/Test" + i + ".java");
+//		    		i++;
+//		    	}
+//		    }
 	    	FileWriter writer = new FileWriter(sourceFile);
 			writer.write(testSuite.toString());
 			writer.close();

@@ -10,195 +10,97 @@ public class CCoinBoxTest {
   @Before
   public void setUp() throws Exception {
     klazz = new CCoinBox();
-    assertEquals(klazz.getStateFullName(), "empty");
-    klazz.setTotalQtrs(0);
-    klazz.setCurQtrs(0);
-    klazz.setAllowVend(false);
+    assertEquals("empty", klazz.getStateFullName());
   }
   @Test
   public void testCase0() {
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
+    assertEquals("notAllowed", klazz.getStateFullName());
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "allowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    klazz.setAllowVend(true);
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
+    assertEquals("allowed", klazz.getStateFullName());
+    klazz.setCurQtrs(3 + 1);
     klazz.vend();
-    assertEquals(klazz.getStateFullName(), "allowed");
-    klazz.setTotalQtrs(klazz.getTotalQtrs() + 2);
-    klazz.setCurQtrs(klazz.getCurQtrs() - 2);
+    assertEquals("allowed", klazz.getStateFullName());
   }
 
   @Test
   public void testCase1() {
     klazz.returnQtrs();
-    assertEquals(klazz.getStateFullName(), "empty");
+    assertEquals("empty", klazz.getStateFullName());
   }
 
   @Test
   public void testCase2() {
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.reset();
-    assertEquals(klazz.getStateFullName(), "empty");
-    klazz.setTotalQtrs(0);
+    assertEquals("empty", klazz.getStateFullName());
   }
 
   @Test
   public void testCase3() {
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
+    assertEquals("notAllowed", klazz.getStateFullName());
     klazz.returnQtrs();
-    assertEquals(klazz.getStateFullName(), "empty");
-    klazz.setCurQtrs(0);
+    assertEquals("empty", klazz.getStateFullName());
   }
 
   @Test
   public void testCase4() {
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    assertEquals(klazz.getStateFullName(), "notAllowed");
+    assertEquals("notAllowed", klazz.getStateFullName());
     klazz.reset();
-    assertEquals(klazz.getStateFullName(), "empty");
-    klazz.setTotalQtrs(0);
-    klazz.setCurQtrs(0);
+    assertEquals("empty", klazz.getStateFullName());
   }
 
   @Test
   public void testCase5() {
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
+    assertEquals("notAllowed", klazz.getStateFullName());
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "allowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    klazz.setAllowVend(true);
+    assertEquals("allowed", klazz.getStateFullName());
     klazz.returnQtrs();
-    assertEquals(klazz.getStateFullName(), "empty");
-    klazz.setCurQtrs(0);
-    klazz.setAllowVend(false);
+    assertEquals("empty", klazz.getStateFullName());
   }
 
   @Test
   public void testCase6() {
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
+    assertEquals("notAllowed", klazz.getStateFullName());
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "allowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    klazz.setAllowVend(true);
-    assertEquals(klazz.getStateFullName(), "allowed");
+    assertEquals("allowed", klazz.getStateFullName());
     klazz.reset();
-    assertEquals(klazz.getStateFullName(), "empty");
-    klazz.setTotalQtrs(0);
-    klazz.setCurQtrs(0);
-    klazz.setAllowVend(false);
+    assertEquals("empty", klazz.getStateFullName());
   }
 
   @Test
   public void testCase7() {
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
+    assertEquals("notAllowed", klazz.getStateFullName());
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "allowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    klazz.setAllowVend(true);
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
+    assertEquals("allowed", klazz.getStateFullName());
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "allowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
+    assertEquals("allowed", klazz.getStateFullName());
   }
 
   @Test
   public void testCase8() {
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
+    assertEquals("notAllowed", klazz.getStateFullName());
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "allowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    klazz.setAllowVend(true);
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
+    assertEquals("allowed", klazz.getStateFullName());
+    klazz.setCurQtrs(2);
     klazz.vend();
-    assertEquals(klazz.getStateFullName(), "empty");
-    klazz.setTotalQtrs(klazz.getTotalQtrs() + 2);
-    klazz.setCurQtrs(0);
-    klazz.setAllowVend(false);
+    assertEquals("empty", klazz.getStateFullName());
   }
 
   @Test
   public void testCase9() {
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
-    assertEquals(klazz.getStateFullName(), "empty");
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    assertEquals(klazz.getStateFullName(), "notAllowed");
+    assertEquals("notAllowed", klazz.getStateFullName());
     klazz.addQtr();
-    assertEquals(klazz.getStateFullName(), "allowed");
-    klazz.setCurQtrs(klazz.getCurQtrs() + 1);
-    klazz.setAllowVend(true);
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
-    assertEquals(klazz.getStateFullName(), "allowed");
+    assertEquals("allowed", klazz.getStateFullName());
+    klazz.setCurQtrs(3);
     klazz.vend();
-    assertEquals(klazz.getStateFullName(), "notAllowed");
-    klazz.setTotalQtrs(klazz.getTotalQtrs() + 2);
-    klazz.setCurQtrs(1);
-    klazz.setAllowVend(false);
+    assertEquals("notAllowed", klazz.getStateFullName());
   }
 
 }
