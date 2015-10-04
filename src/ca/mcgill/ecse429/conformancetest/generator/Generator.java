@@ -1,5 +1,16 @@
 package ca.mcgill.ecse429.conformancetest.generator;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.tools.JavaCompiler;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
+import javax.tools.ToolProvider;
 
 import ca.mcgill.ecse429.conformancetest.generator.tree.Node;
 import ca.mcgill.ecse429.conformancetest.generator.tree.RoundTripPathTree;
@@ -23,6 +34,39 @@ public class Generator {
 		RoundTripPathTree tree = new RoundTripPathTree(this.sm);
 		buildTestCases(tree.getRoot());
 		System.out.println(testSuite.toString());
+		exportToFile();
+	}
+	
+	private void exportToFile(){
+
+	    try {
+	    	
+	    	File sourceFile = new File("C:/temp/Test.java");
+		    if(sourceFile.exists()){
+		    	int i = 1;
+		    	while(!sourceFile.createNewFile()){
+		    		sourceFile = new File("C:/temp/Test" + i + ".java");
+		    		i++;
+		    	}
+		    }
+	    	FileWriter writer = new FileWriter(sourceFile);
+			writer.write(testSuite.toString());
+			writer.close();
+//		
+//		    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+//		    StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+//
+//			fileManager.setLocation(StandardLocation.CLASS_OUTPUT,
+//                    Arrays.asList(new File("C:/temp")));
+//			
+//			compiler.getTask(null, fileManager, null, null, null,
+//		               fileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile)))
+//		            .call();
+//		    fileManager.close();
+		    
+	    } catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void initializeTestCases(Node root, String className){		
