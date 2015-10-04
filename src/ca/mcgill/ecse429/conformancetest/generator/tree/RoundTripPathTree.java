@@ -12,6 +12,10 @@ public class RoundTripPathTree {
 	private StateMachine sm;
 	private HashSet<State> seen;
 	
+	/**
+	 * Create a new RoundTripPathTree
+	 * @param sm	State Machine to generate from
+	 */
 	public RoundTripPathTree(StateMachine sm){
 		this.root = new Node(sm.getStartState(), Optional.empty());
 		this.sm = sm;
@@ -32,6 +36,10 @@ public class RoundTripPathTree {
 				.forEach(this::buildTree);
 	}
 	
+	/**
+	 * Get the root of the tree
+	 * @return	The Node of the root of the tree
+	 */
 	public Node getRoot(){
 		return root;
 	}

@@ -28,35 +28,15 @@ public class Generator {
 		this.sm = StateMachine.getInstance();
 		RoundTripPathTree tree = new RoundTripPathTree(this.sm);
 		buildTestCases(tree.getRoot());
-//		System.out.println(testSuite.toString());
 		exportToFile();
 	}
 	
 	private void exportToFile(){
 	    try {
 	    	File sourceFile = new File(this.sourceFile);
-//		    if(sourceFile.exists()){
-//		    	int i = 1;
-//		    	while(!sourceFile.createNewFile()){
-//		    		sourceFile = new File("C:/temp/Test" + i + ".java");
-//		    		i++;
-//		    	}
-//		    }
 	    	FileWriter writer = new FileWriter(sourceFile);
 			writer.write(testSuite.toString());
 			writer.close();
-//		
-//		    JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-//		    StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-//
-//			fileManager.setLocation(StandardLocation.CLASS_OUTPUT,
-//                    Arrays.asList(new File("C:/temp")));
-//			
-//			compiler.getTask(null, fileManager, null, null, null,
-//		               fileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile)))
-//		            .call();
-//		    fileManager.close();
-		    
 	    } catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -76,7 +56,7 @@ public class Generator {
 		indent(2); testSuite.append("klazz = new " + className + "();\n");
 		
 		if(!root.moves.isEmpty()){
-			root.moves.get(0).trans.ifPresent(t -> this.verifyTransition(testSuite, t));
+			root.moves.get(0).trans.ifPresent(t -> verifyCurrentState(testSuite, t.getTo()));
 		}
 		
 		indent(1); testSuite.append("}\n");
@@ -115,19 +95,17 @@ public class Generator {
 			s.append(sb.toString());
 			final int x = i;
 			n.moves.get(i).trans.ifPresent(t -> {
-//				verifyCurrentState(sb, t.getFrom());
 				setConditions(s, t);
 				performNextTransition(s, t);
-				verifyTransition(s, t);
+				verifyCurrentState(s, t.getTo());
 				generateTestCases(s, n.moves.get(x));
 			});
 		}
 		final int x = n.moves.size() - 1;
 		n.moves.get(x).trans.ifPresent(t -> {
-//			verifyCurrentState(sb, t.getFrom());
 			setConditions(sb, t);
 			performNextTransition(sb, t);
-			verifyTransition(sb, t);
+			verifyCurrentState(sb, t.getTo());
 			generateTestCases(sb, n.moves.get(x));
 		});
 	}
@@ -163,41 +141,7 @@ public class Generator {
 			}
 		}
 	}
-	
-	private void verifyTransition(StringBuilder s, Transition t){
-		verifyCurrentState(s, t.getTo());
-		String action = t.getAction();
-//		if(action.length() > 0){
-//			String[] actions = action.split(";");
-//			for (String a : actions){
-//				if (a.length() > 0){
-//					String[] act = a.trim().split(" ?= ?");
-//					if(act.length != 2){
-//						String x = "";
-//						for (String y : act){
-//							x = x + ", " + y;
-//						}
-//						throw new RuntimeException("ERROR: " + x);
-//					} else {
-//						String method = act[0].substring(0, 1).toUpperCase() + act[0].substring(1);
-//						String arg = act[1];
-//						if (arg.trim().matches(act[0].trim() + " ?[+-] ?[0-9]+")){
-//							arg = arg.replace(act[0].trim(), "klazz.get" + method + "()");
-//						} 
-//						
-//						indent(s, 2); s.append("// klazz.set" + method + "(" + arg + ");\n");
-//					}
-//				}
-//			}
-//		}
-
-//		if (condition.length() > 0){
-//			indent(s, 2); s.append("Condition: " + condition + "\n");
-//			indent(s, 2); s.append("Event: " + event + "\n");
-//			indent(s, 2); s.append("Action: " + action + "\n");
-//		}
-	}
-	
+		
 	private void performNextTransition(StringBuilder s, Transition t){
 		if(t.getEvent().length() > 0){
 			indent(s, 2); s.append("klazz." + t.getEvent() + "();\n");
