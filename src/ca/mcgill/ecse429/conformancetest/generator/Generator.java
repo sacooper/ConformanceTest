@@ -107,19 +107,16 @@ public class Generator {
 			} else if (cond.matches("^!get.*\\(\\)$")){
 				indent(s, 2); s.append("klazz.set" + cond.substring(4, cond.length() - 1) + "false);\n");
 			} else if (cond.matches(".+[<>=]=[ 0-9]+")){
-				indent(s, 2); s.append("// COND: " + cond + "\n");
 				String[] split = cond.split("[<>=]=");
 				String method = "klazz.set" + split[0].trim().substring(0, 1).toUpperCase() + split[0].trim().substring(1);
 				String value = split[1].trim();
 				indent(s, 2); s.append(method + "(" + value + ");\n");				
 			} else if (cond.matches(".+>[^=].+")){
-				indent(s, 2); s.append("// COND: " + cond + "\n");
 				String[] split = cond.split(">");
 				String method = "klazz.set" + split[0].trim().substring(0, 1).toUpperCase() + split[0].trim().substring(1);
 				String value = split[1].trim();
 				indent(s, 2); s.append(method + "(" + value + " + 1);\n");
 			} else if (cond.matches(".+<[^=].+")){
-				indent(s, 2); s.append("// COND: " + cond + "\n");
 				String[] split = cond.split(">");
 				String method = "klazz.set" + split[0].trim().substring(0, 1).toUpperCase() + split[0].trim().substring(1);
 				String value = split[1].trim();
