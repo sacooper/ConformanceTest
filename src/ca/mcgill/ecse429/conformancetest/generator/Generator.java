@@ -122,7 +122,7 @@ public class Generator {
 			s.append(sb.toString());
 			final int x = i;
 			n.moves.get(i).trans.ifPresent(t -> {
-				verifyCurrentState(sb, t.getFrom());
+//				verifyCurrentState(sb, t.getFrom());
 				setConditions(s, t);
 				performNextTransition(s, t);
 				verifyTransition(s, t);
@@ -131,7 +131,7 @@ public class Generator {
 		}
 		final int x = n.moves.size() - 1;
 		n.moves.get(x).trans.ifPresent(t -> {
-			verifyCurrentState(sb, t.getFrom());
+//			verifyCurrentState(sb, t.getFrom());
 			setConditions(sb, t);
 			performNextTransition(sb, t);
 			verifyTransition(sb, t);
@@ -140,7 +140,7 @@ public class Generator {
 	}
 	
 	private void verifyCurrentState(StringBuilder s, State t){
-		indent(s, 2); s.append("assertEquals(klazz.getStateFullName(), \"" + t.getName() + "\");\n");
+		indent(s, 2); s.append("assertEquals(\"" + t.getName() + "\", klazz.getStateFullName());\n");
 	}
 	
 	private void setConditions(StringBuilder s, Transition t){
@@ -148,40 +148,58 @@ public class Generator {
 			String cond = t.getCondition();
 			if (cond.matches("^get.*\\(\\)$")){
 				indent(s, 2); s.append("klazz.set" + cond.substring(3, cond.length() - 1) + "true);\n");
-			} if (cond.matches("^!get.*\\(\\)$")){
+			} else if (cond.matches("^!get.*\\(\\)$")){
 				indent(s, 2); s.append("klazz.set" + cond.substring(4, cond.length() - 1) + "false);\n");
+			} else if (cond.matches(".+[<>=]=[ 0-9]+")){
+				indent(s, 2); s.append("// COND: " + cond + "\n");
+				String[] split = cond.split("[<>=]=");
+				String method = "klazz.set" + split[0].trim().substring(0, 1).toUpperCase() + split[0].trim().substring(1);
+				String value = split[1].trim();
+				indent(s, 2); s.append(method + "(" + value + ");\n");				
+			} else if (cond.matches(".+>[^=].+")){
+				indent(s, 2); s.append("// COND: " + cond + "\n");
+				String[] split = cond.split(">");
+				String method = "klazz.set" + split[0].trim().substring(0, 1).toUpperCase() + split[0].trim().substring(1);
+				String value = split[1].trim();
+				indent(s, 2); s.append(method + "(" + value + " + 1);\n");
+			} else if (cond.matches(".+<[^=].+")){
+				indent(s, 2); s.append("// COND: " + cond + "\n");
+				String[] split = cond.split(">");
+				String method = "klazz.set" + split[0].trim().substring(0, 1).toUpperCase() + split[0].trim().substring(1);
+				String value = split[1].trim();
+				indent(s, 2); s.append(method + "(" + value + " - 1);\n");
+			} else {
+				indent(s, 2); s.append("// COND: " + cond + "\n");
 			}
 		}
 	}
 	
 	private void verifyTransition(StringBuilder s, Transition t){
 		verifyCurrentState(s, t.getTo());
-//		String condition = t.getCondition();
-//		String event = t.getEvent();
 		String action = t.getAction();
-		if(action.length() > 0){
-			String[] actions = action.split(";");
-			for (String a : actions){
-				if (a.length() > 0){
-					String[] act = a.trim().split(" ?= ?");
-					if(act.length != 2){
-						String x = "";
-						for (String y : act){
-							x = x + ", " + y;
-						}
-						throw new RuntimeException("ERROR: " + x);
-					} else {
-						String method = act[0].substring(0, 1).toUpperCase() + act[0].substring(1);
-						String arg = act[1];
-						if (act[1].trim().matches(act[0].trim() + " ?[+-] ?[0-9]+")){
-							arg = arg.replace(act[0].trim(), "klazz.get" + method + "()");
-						} 
-						
-						indent(s, 2); s.append("klazz.set" + method + "(" + arg + ");\n"); 
-					}
-				}
-			}
-		}
+//		if(action.length() > 0){
+//			String[] actions = action.split(";");
+//			for (String a : actions){
+//				if (a.length() > 0){
+//					String[] act = a.trim().split(" ?= ?");
+//					if(act.length != 2){
+//						String x = "";
+//						for (String y : act){
+//							x = x + ", " + y;
+//						}
+//						throw new RuntimeException("ERROR: " + x);
+//					} else {
+//						String method = act[0].substring(0, 1).toUpperCase() + act[0].substring(1);
+//						String arg = act[1];
+//						if (arg.trim().matches(act[0].trim() + " ?[+-] ?[0-9]+")){
+//							arg = arg.replace(act[0].trim(), "klazz.get" + method + "()");
+//						} 
+//						
+//						indent(s, 2); s.append("// klazz.set" + method + "(" + arg + ");\n");
+//					}
+//				}
+//			}
+//		}
 
 //		if (condition.length() > 0){
 //			indent(s, 2); s.append("Condition: " + condition + "\n");
