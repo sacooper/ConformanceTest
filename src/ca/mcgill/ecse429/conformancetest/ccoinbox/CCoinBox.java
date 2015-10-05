@@ -100,18 +100,15 @@ public class CCoinBox
     {
       case empty:
         setState(State.empty);
-        allowVend = false;
         wasEventProcessed = true;
         break;
       case notAllowed:
         curQtrs = 0;
-        allowVend = false;
         setState(State.empty);
         wasEventProcessed = true;
         break;
       case allowed:
         curQtrs = 0;
-        allowVend = false;
         setState(State.empty);
         wasEventProcessed = true;
         break;
@@ -130,18 +127,15 @@ public class CCoinBox
     switch (aState)
     {
       case empty:
-        curQtrs = curQtrs + 1;
         setState(State.notAllowed);
         wasEventProcessed = true;
         break;
       case notAllowed:
-        curQtrs = curQtrs + 1;
         allowVend = true;
         setState(State.allowed);
         wasEventProcessed = true;
         break;
       case allowed:
-        curQtrs = curQtrs + 1;
         setState(State.allowed);
         wasEventProcessed = true;
         break;
@@ -161,21 +155,18 @@ public class CCoinBox
     {
       case empty:
         totalQtrs = 0;
-        allowVend = false;
         setState(State.empty);
         wasEventProcessed = true;
         break;
       case notAllowed:
         totalQtrs = 0;
         curQtrs = 0;
-        allowVend = false;
         setState(State.empty);
         wasEventProcessed = true;
         break;
       case allowed:
         totalQtrs = 0;
         curQtrs = 0;
-        allowVend = false;
         setState(State.empty);
         wasEventProcessed = true;
         break;
