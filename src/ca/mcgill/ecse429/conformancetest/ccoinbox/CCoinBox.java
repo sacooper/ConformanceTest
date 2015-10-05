@@ -127,16 +127,19 @@ public class CCoinBox
     switch (aState)
     {
       case empty:
+        curQtrs = curQtrs + 1;
         setState(State.notAllowed);
         wasEventProcessed = true;
         break;
       case notAllowed:
+    	curQtrs = curQtrs + 1;
         allowVend = true;
         setState(State.allowed);
         wasEventProcessed = true;
         break;
       case allowed:
-        setState(State.allowed);
+    	curQtrs = curQtrs + 1;
+        setState(State.notAllowed);
         wasEventProcessed = true;
         break;
       default:

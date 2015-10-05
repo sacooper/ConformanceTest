@@ -19,19 +19,25 @@ public class Generator {
 	private ArrayList<StringBuilder> testCases;
 	private String sourceFile;
 	private int counter;
-
-	public Generator(String xmlFile, String sourceFile) {
+	
+	public Generator(String xmlFile){
 		PersistenceStateMachine.loadStateMachine(xmlFile);
 		this.counter = 0;
 		this.testSuite = new StringBuilder();
 		this.testCases = new ArrayList<StringBuilder>();
-		this.sourceFile = sourceFile;
+		this.sourceFile = null;
 	}
-
+	
 	public void generate() {
 		this.sm = StateMachine.getInstance();
 		RoundTripPathTree tree = new RoundTripPathTree(this.sm);
 		buildTestCases(tree.getRoot());
+		
+		if(this.sourceFile == null){
+			String className = sm.getClassName().substring(0, sm.getClassName().indexOf('.'));
+			this.sourceFile = "src/" + sm.getPackageName().replace('.', '/') + "/GeneratedTest" + sm.getClassName();
+		}
+		
 		exportToFile();
 	}
 
@@ -52,7 +58,7 @@ public class Generator {
 		testSuite.append("import static org.junit.Assert.*;\n");
 		testSuite.append("import org.junit.Before;\n");
 		testSuite.append("import org.junit.Test;\n\n");
-		testSuite.append("public class " + className + "Test " + "{\n");
+		testSuite.append("public class GeneratedTest" + className + "" + "{\n");
 
 		indent(1);
 		testSuite.append("private " + className + " klazz;\n\n");
@@ -86,8 +92,7 @@ public class Generator {
 	}
 
 	private void buildTestCases(Node root) {
-		String className = sm.getClassName().substring(0,
-				sm.getClassName().indexOf('.'));
+		String className = sm.getClassName().substring(0, sm.getClassName().indexOf('.'));
 		initializeTestCases(root, className);
 
 		StringBuilder sb = new StringBuilder();

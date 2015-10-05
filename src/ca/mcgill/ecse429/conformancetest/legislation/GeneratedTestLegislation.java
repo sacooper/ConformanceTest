@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class LegislationTest {
+public class GeneratedTestLegislation{
   private Legislation klazz;
 
   @Before
@@ -20,7 +20,9 @@ public class LegislationTest {
 
   @Test
   public void testCase1() {
+    Object o0_0 = false;
     klazz.introduceInSenate();
+    assertEquals(klazz.getIsCommonsBill() , o0_0);
     assertEquals("inSenate", klazz.getStateFullName());
     klazz.setIsCommonsBill(true);
     klazz.votePasses();
@@ -29,7 +31,9 @@ public class LegislationTest {
 
   @Test
   public void testCase2() {
+    Object o0_0 = false;
     klazz.introduceInSenate();
+    assertEquals(klazz.getIsCommonsBill() , o0_0);
     assertEquals("inSenate", klazz.getStateFullName());
     klazz.voteFails();
     assertEquals("inPreparation", klazz.getStateFullName());
@@ -37,7 +41,9 @@ public class LegislationTest {
 
   @Test
   public void testCase3() {
+    Object o0_0 = false;
     klazz.introduceInSenate();
+    assertEquals(klazz.getIsCommonsBill() , o0_0);
     assertEquals("inSenate", klazz.getStateFullName());
     klazz.setIsCommonsBill(false);
     klazz.votePasses();
@@ -49,7 +55,9 @@ public class LegislationTest {
 
   @Test
   public void testCase4() {
+    Object o0_0 = false;
     klazz.introduceInSenate();
+    assertEquals(klazz.getIsCommonsBill() , o0_0);
     assertEquals("inSenate", klazz.getStateFullName());
     klazz.setIsCommonsBill(false);
     klazz.votePasses();
@@ -60,7 +68,9 @@ public class LegislationTest {
 
   @Test
   public void testCase5() {
+    Object o0_0 = false;
     klazz.introduceInSenate();
+    assertEquals(klazz.getIsCommonsBill() , o0_0);
     assertEquals("inSenate", klazz.getStateFullName());
     klazz.setIsCommonsBill(false);
     klazz.votePasses();
